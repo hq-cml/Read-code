@@ -7,6 +7,11 @@
 LC_ALL=C
 export LC_ALL
 
+#". file"：这种用法在shell中是模块化和复用的效果，相当于source一个文件（类似于c的include）
+#详细解释：http://blog.csdn.net/arganzheng/article/details/6786926
+
+#auto/options脚本处理configure命令的参数。例如，如果参数是--help，那么显示支持的所有参数格式。
+#options脚本会定义后续工作将要用到的变量，然后根据本次参数以及默认值设置这些变量
 . auto/options
 . auto/init
 . auto/sources

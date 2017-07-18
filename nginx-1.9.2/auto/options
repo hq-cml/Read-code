@@ -161,10 +161,35 @@ NGX_POST_CONF_MSG=
 
 opt=
 
+#这块自己写了一个例子，发现shell可以这么用
+##!/bin/sh
+#
+#for option
+#do
+#        echo $option
+#        opt="$opt `echo $option | sed -e \"s/\(--[^=]*=\)\(.* .*\)/\1'\2'/\"`"
+#        echo $opt
+#done
+#运行：-> /root#./t.sh --with-md5=xyz --with-haha --with-haha=zzzz
+#
+#结果：
+#--with-md5=xyz
+#--with-md5=xyz
+#--with-haha
+#--with-md5=xyz --with-haha
+#--with-haha=zzzz
+#--with-md5=xyz --with-haha --with-haha=zzzz
+#
+#说明：
+#最终opt就是所有的参数和其来的
+
 for option
 do
+	#将opt不断的append，直到最终其就是素有参数合起来
+	#echo $option | sed -e \"s/\(--[^=]*=\)\(.* .*\)/\1'\2'/\"
     opt="$opt `echo $option | sed -e \"s/\(--[^=]*=\)\(.* .*\)/\1'\2'/\"`"
 
+	#每个option就是一块参数
     case "$option" in
         -*=*) value=`echo "$option" | sed -e 's/[-_a-zA-Z0-9]*=//'` ;;
            *) value="" ;;
@@ -342,7 +367,7 @@ done
 
 NGX_CONFIGURE="$opt"
 
-
+#如果有--help，则打印useage
 if [ $help = yes ]; then
 
 cat << END
