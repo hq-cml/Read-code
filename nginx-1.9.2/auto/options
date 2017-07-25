@@ -170,7 +170,7 @@ opt=
 #        opt="$opt `echo $option | sed -e \"s/\(--[^=]*=\)\(.* .*\)/\1'\2'/\"`"
 #        echo $opt
 #done
-#运行：-> /root#./t.sh --with-md5=xyz --with-haha --with-haha=zzzz
+#运行：-> #./t.sh --with-md5=xyz --with-haha --with-haha=zzzz
 #
 #结果：
 #--with-md5=xyz

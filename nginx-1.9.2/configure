@@ -3,7 +3,7 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
-
+#设置Locale，软件在运行时的语言环境
 LC_ALL=C
 export LC_ALL
 
@@ -19,17 +19,30 @@ export LC_ALL
 #此外还会check echo的-n和\c，并且还会生成makefile文件
 . auto/init
 
-
+#auto/sources脚本将分析Nginx的源码结构，列举出所有依赖的头文件和源文件
+#这些文件后续会用来构造Makefile文件
 . auto/sources
 
+#如果目录$NGX_OBJS，不存在则创建之，这个变量在options中由—builddir=DIR参数指定
+#它用于编译过程中所有目标文件生成的存放，默认情况下为<nginx-source>/objs
 test -d $NGX_OBJS || mkdir $NGX_OBJS
 
+#创建空文件ngx_auto_headers.h、autoconf.err等必要的编译文件
+#auto/init中定义了  NGX_AUTO_HEADERS_H和NGX_AUTOCONF_ERR变量
 echo > $NGX_AUTO_HEADERS_H
 echo > $NGX_AUTOCONF_ERR
 
+#以宏定义形式向objs/ngx_auto_config.h写入命令行带的参数
+#$NGX_CONFIGURE的内容在options的分析中有详细说明
 echo "#define NGX_CONFIGURE \"$NGX_CONFIGURE\"" > $NGX_AUTO_CONFIG_H
 
-
+#判断DEBUG标志，如果有，那么在objs/ngx_auto_config.h文件中写入DEBUG宏
+#这种写法在下面经常出现，期含义是先定义have变量为NGX_DEBUG，然后调用auto/have
+#have脚本的行为是将NGX_DEBUG以宏定义形式写入ngx_auto_config.h文件
+#最终ngx_auto_config.h文件会有有一段如下内容：
+#ifndef NGX_DEBUG
+#define NGX_DEBUG  1
+#endif
 if [ $NGX_DEBUG = YES ]; then
     have=NGX_DEBUG . auto/have
 fi
