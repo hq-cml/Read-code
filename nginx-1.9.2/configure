@@ -47,16 +47,17 @@ if [ $NGX_DEBUG = YES ]; then
     have=NGX_DEBUG . auto/have
 fi
 
-
+#现在开始检查操作系统参数是否支持后续编译
 if test -z "$NGX_PLATFORM"; then
     echo "checking for OS"
 
-    NGX_SYSTEM=`uname -s 2>/dev/null`
-    NGX_RELEASE=`uname -r 2>/dev/null`
-    NGX_MACHINE=`uname -m 2>/dev/null`
+    NGX_SYSTEM=`uname -s 2>/dev/null`  	#系统名     
+    NGX_RELEASE=`uname -r 2>/dev/null`  #内核版本
+    NGX_MACHINE=`uname -m 2>/dev/null`  #当前硬件设备类型-CPU型号
 
     echo " + $NGX_SYSTEM $NGX_RELEASE $NGX_MACHINE"
 
+	#输出当前平台信息
     NGX_PLATFORM="$NGX_SYSTEM:$NGX_RELEASE:$NGX_MACHINE";
 
     case "$NGX_SYSTEM" in
@@ -70,11 +71,13 @@ else
     NGX_SYSTEM=$NGX_PLATFORM
 fi
 
+#检查并设置编译器，如GCC是否安装、GCC版本是否支持后续编译nginx
 . auto/cc/conf
 
 if [ "$NGX_PLATFORM" != win32 ]; then
     . auto/headers
 fi
+
 
 . auto/os/conf
 
