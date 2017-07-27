@@ -12,6 +12,9 @@ if [ "$NGX_PLATFORM" != win32 ]; then
     ngx_feature_path=
     ngx_feature_libs=
     ngx_feature_test=
+	
+	
+	#该文件主要是检查ngx_feature的功能系统是否支持
     . auto/feature
 
     if [ $ngx_found = no ]; then
@@ -64,6 +67,7 @@ elif `$CC -V 2>&1 | grep '^Intel(R) C' >/dev/null 2>&1`; then
     echo " + using Intel C++ compiler"
 
 elif `$CC -v 2>&1 | grep 'gcc version' >/dev/null 2>&1`; then
+	#会进入此分支
     NGX_CC_NAME=gcc
     echo " + using GNU C compiler"
 

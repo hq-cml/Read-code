@@ -29,11 +29,14 @@ ngx_spacer=
 ngx_long_regex_cont=$ngx_regex_cont
 ngx_long_cont=$ngx_cont
 
+#这里获取编译器类型$NGX_CC_NAME
 . auto/cc/name
 
+echo "debug .............................. $CFLAGS"
+echo "debug .............................. $NGX_CC_NAME" #gcc
+echo "debug .............................. $CFLAGS"
+
 #如果CFLAGS变量非空
-echo "debug .............................. $CFLAGS $NGX_CC_NAME $CFLAGS"
-exit
 if test -n "$CFLAGS"; then
 
     CC_TEST_FLAGS="$CFLAGS $NGX_CC_OPT"

@@ -17,6 +17,7 @@ NGX_GROUP=
 NGX_BUILD=
 
 CC=${CC:-cc}
+echo $CC
 CPP=
 NGX_OBJS=objs
 

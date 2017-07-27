@@ -25,6 +25,11 @@ if test -n "$ngx_feature_path"; then
     done
 fi
 
+#通过main函数中执行ngx_feature_test得到结果，主要通过auto/os/linux调用这个文件
+#echo "HQ Debug auto/feature NGX_AUTOTEST is ...... $NGX_AUTOTEST"
+#echo "HQ Debug auto/feature ngx_feature_test is ...... $ngx_feature_test"
+
+#生成objs/autotest.c文件
 cat << END > $NGX_AUTOTEST.c
 
 #include <sys/types.h>
@@ -38,21 +43,23 @@ int main() {
 
 END
 
-
+#编译生成的文件
 ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $ngx_feature_inc_path \
           -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_TEST_LD_OPT $ngx_feature_libs"
+#echo "HQ Debug auto/feature ngx_test is ...... $ngx_test"
 
 ngx_feature_inc_path=
 
 eval "/bin/sh -c \"$ngx_test\" >> $NGX_AUTOCONF_ERR 2>&1"
 
-
+#文件存在并且可执行，外层ngx_feature_run赋值为yes，所以进入yes分之
 if [ -x $NGX_AUTOTEST ]; then
-
+	#echo "HQ Debug auto/feature ngx_feature_run is ...... $ngx_feature_run"
     case "$ngx_feature_run" in
 
         yes)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+			#命令执行成功，返回0 ，否则返回非0 ；返回0会进入then分之
             if /bin/sh -c $NGX_AUTOTEST >> $NGX_AUTOCONF_ERR 2>&1; then
                 echo " found"
                 ngx_found=yes
@@ -120,4 +127,5 @@ else
     echo "----------"    >> $NGX_AUTOCONF_ERR
 fi
 
-rm -rf $NGX_AUTOTEST*
+#清除打扫
+#rm -rf $NGX_AUTOTEST*
