@@ -244,7 +244,6 @@ $ngx_modules_obj:	\$(CORE_DEPS)$ngx_cont$ngx_modules_c
 	$ngx_cc$ngx_tab$ngx_objout$ngx_modules_obj$ngx_tab$ngx_modules_c$NGX_AUX
 
 END
-exit
 
 #生成core的依赖分析内容
 # the core sources

@@ -177,11 +177,13 @@ have=NGX_HTTP_SCGI_TEMP_PATH value="\"$NGX_HTTP_SCGI_TEMP_PATH\""
 #创建编译时使用的objs/Makefile文件
 . auto/make
 
+#为objs/Makefile加入需要连接的第三方静态库、动态库或者目标文件
+#分别调用auto/lib目录下各个子目录中的make文件
 . auto/lib/make
 
-#HQ
-echo "HQ Exit"
-exit
+#为objs/Makefile加入install功能，当执行make install时,
+#将编译生成的必要文件复制到安装路径，建立必要的目录
+#此外，对于根目录下的Makefile，也会追加一部分编译内容
 . auto/install
 
 # STUB

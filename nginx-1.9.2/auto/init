@@ -2,7 +2,7 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
-#NGX_OBJSåœ¨optionsä¸­å®šä¹‰çš„ï¼Œé»˜è®¤objsï¼Œä¹Ÿå¯ä»¥ç”¨--builddiræ¥æŒ‡å®š
+#NGX_OBJSÔÚoptionsÖÐ¶¨ÒåµÄ£¬Ä¬ÈÏobjs£¬Ò²¿ÉÒÔÓÃ--builddirÀ´Ö¸¶¨
 NGX_MAKEFILE=$NGX_OBJS/Makefile
 NGX_MODULES_C=$NGX_OBJS/ngx_modules.c
 

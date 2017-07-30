@@ -2,8 +2,8 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
-#è¯¥æ–‡ä»¶ç±»ä¼¼äºä¸€ä¸ªå°è£…çš„å‡½æ•°ï¼Œä¸»è¦æ˜¯æ£€æŸ¥ngx_featureçš„åŠŸèƒ½ç³»ç»Ÿæ˜¯å¦æ”¯æŒï¼Œngx_featureæ˜¯åŠ¨æ€æŒ‡å®šçš„
-#é€šè¿‡ç”Ÿæˆä¸€ä¸ªç®€å•çš„.cæ–‡ä»¶ï¼Œmainå‡½æ•°ä¸­æ‰§è¡Œngx_feature_testè¡¨ç¤ºçš„ä»£ç å¾—åˆ°ç»“æœï¼Œä¸»è¦é€šè¿‡auto/os/linuxè°ƒç”¨è¿™ä¸ªæ–‡ä»¶
+#¸ÃÎÄ¼şÀàËÆÓÚÒ»¸ö·â×°µÄº¯Êı£¬Ö÷ÒªÊÇ¼ì²éngx_featureµÄ¹¦ÄÜÏµÍ³ÊÇ·ñÖ§³Ö£¬ngx_featureÊÇ¶¯Ì¬Ö¸¶¨µÄ
+#Í¨¹ıÉú³ÉÒ»¸ö¼òµ¥µÄ.cÎÄ¼ş£¬mainº¯ÊıÖĞÖ´ĞĞngx_feature_test±íÊ¾µÄ´úÂëµÃµ½½á¹û£¬Ö÷ÒªÍ¨¹ıauto/os/linuxµ÷ÓÃÕâ¸öÎÄ¼ş
 
 echo $ngx_n "checking for $ngx_feature ...$ngx_c"
 
@@ -27,12 +27,12 @@ if test -n "$ngx_feature_path"; then
     done
 fi
 
-#é€šè¿‡mainå‡½æ•°ä¸­æ‰§è¡Œngx_feature_testå¾—åˆ°ç»“æœï¼Œä¸»è¦é€šè¿‡auto/os/linuxè°ƒç”¨è¿™ä¸ªæ–‡ä»¶
+#Í¨¹ımainº¯ÊıÖĞÖ´ĞĞngx_feature_testµÃµ½½á¹û£¬Ö÷ÒªÍ¨¹ıauto/os/linuxµ÷ÓÃÕâ¸öÎÄ¼ş
 #echo "## -HQ- ##  Debug auto/feature NGX_AUTOTEST is ...... $NGX_AUTOTEST"
 #echo "## -HQ- ##  auto/feature ngx_feature_test is ...... $ngx_feature_test"
 
-#ç”Ÿæˆobjs/autotest.cæ–‡ä»¶
-#/bin/sh -c $NGX_AUTOTESTï¼Œä»£ç return 0ï¼Œå¤–å±‚ä¼šè®¤ä¸ºæ˜¯æˆåŠŸï¼›è¿”å›é0ï¼Œå¤–å±‚ä¼šè®¤ä¸ºæ˜¯å¤±è´¥
+#Éú³Éobjs/autotest.cÎÄ¼ş
+#/bin/sh -c $NGX_AUTOTEST£¬´úÂëreturn 0£¬Íâ²ã»áÈÏÎªÊÇ³É¹¦£»·µ»Ø·Ç0£¬Íâ²ã»áÈÏÎªÊÇÊ§°Ü
 cat << END > $NGX_AUTOTEST.c
 
 #include <sys/types.h>
@@ -46,7 +46,7 @@ int main() {
 
 END
 
-#ç¼–è¯‘ç”Ÿæˆçš„æ–‡ä»¶
+#±àÒëÉú³ÉµÄÎÄ¼ş
 ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $ngx_feature_inc_path \
           -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_TEST_LD_OPT $ngx_feature_libs"
 #echo "HQ Debug auto/feature ngx_test is ...... $ngx_test"
@@ -55,14 +55,14 @@ ngx_feature_inc_path=
 
 eval "/bin/sh -c \"$ngx_test\" >> $NGX_AUTOCONF_ERR 2>&1"
 
-#æ–‡ä»¶å­˜åœ¨å¹¶ä¸”å¯æ‰§è¡Œï¼Œå¤–å±‚ngx_feature_runèµ‹å€¼ä¸ºyesï¼Œæ‰€ä»¥è¿›å…¥yesåˆ†ä¹‹
+#ÎÄ¼ş´æÔÚ²¢ÇÒ¿ÉÖ´ĞĞ£¬Íâ²ãngx_feature_run¸³ÖµÎªyes£¬ËùÒÔ½øÈëyes·ÖÖ®
 if [ -x $NGX_AUTOTEST ]; then
 	#echo "HQ Debug auto/feature ngx_feature_run is ...... $ngx_feature_run"
     case "$ngx_feature_run" in
 
         yes)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-			#å‘½ä»¤æ‰§è¡ŒæˆåŠŸï¼Œè¿”å›0 ï¼Œå¦åˆ™è¿”å›é0 ï¼›è¿”å›0ä¼šè¿›å…¥thenåˆ†ä¹‹
+			#ÃüÁîÖ´ĞĞ³É¹¦£¬·µ»Ø0 £¬·ñÔò·µ»Ø·Ç0 £»·µ»Ø0»á½øÈëthen·ÖÖ®
             if /bin/sh -c $NGX_AUTOTEST >> $NGX_AUTOCONF_ERR 2>&1; then
                 echo " found"
                 ngx_found=yes
@@ -130,5 +130,5 @@ else
     echo "----------"    >> $NGX_AUTOCONF_ERR
 fi
 
-#æ¸…é™¤æ‰“æ‰«
+#Çå³ı´òÉ¨
 #rm -rf $NGX_AUTOTEST*
