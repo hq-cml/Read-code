@@ -2,7 +2,7 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
-
+#改文件，将nginx要用的modules分成几大类，分别进行计算，最终会拼装生成ngx_modules.c文件
 if [ $EVENT_SELECT = NO -a $EVENT_FOUND = NO ]; then
     EVENT_SELECT=YES
 fi
@@ -54,6 +54,8 @@ if [ $NGX_TEST_BUILD_SOLARIS_SENDFILEV = YES ]; then
     CORE_SRCS="$CORE_SRCS $SOLARIS_SENDFILEV_SRCS"
 fi
 
+echo "## -HQ- ##  Debug auto/modules EVENT_MODULES is ...... $EVENT_MODULES"
+echo "## -HQ- ##  Debug auto/modules CORE_SRCS is ...... $CORE_SRCS"
 
 if [ $HTTP != YES ]; then
     have=NGX_CRYPT . auto/nohave
@@ -179,6 +181,7 @@ if [ $HTTP_USERID = YES ]; then
     HTTP_SRCS="$HTTP_SRCS $HTTP_USERID_SRCS"
 fi
 
+echo "## -HQ- ##  Debug auto/modules HTTP_FILTER_MODULES is ...... $HTTP_FILTER_MODULES"
 
 if [ $HTTP_SPDY = YES ]; then
     have=NGX_HTTP_SPDY . auto/have
@@ -396,6 +399,8 @@ if [ $HTTP_STUB_STATUS = YES ]; then
     HTTP_SRCS="$HTTP_SRCS src/http/modules/ngx_http_stub_status_module.c"
 fi
 
+echo "## -HQ- ##  Debug auto/modules HTTP_MODULES is ...... $HTTP_MODULES"
+
 #if [ -r $NGX_OBJS/auto ]; then
 #    . $NGX_OBJS/auto
 #fi
@@ -433,7 +438,7 @@ if [ $STREAM_SSL = YES ]; then
     USE_OPENSSL=YES
 fi
 
-
+#进行modules的拼装
 modules="$CORE_MODULES $EVENT_MODULES"
 
 
@@ -550,7 +555,7 @@ if [ $NGX_CPP_TEST = YES ]; then
     CORE_LIBS="$CORE_LIBS -lstdc++"
 fi
 
-
+#生成最关键的ngx_modules.c文件
 cat << END                                    > $NGX_MODULES_C
 
 #include <ngx_config.h>

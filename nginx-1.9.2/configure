@@ -119,10 +119,19 @@ fi
 #http://www.infoq.com/cn/articles/thread-pools-boost-performance-9x/
 . auto/threads
 
+#auto/modules是构造运行期modules的脚本。它将会生成ngx_modules.c文件，这个文件会被编译进Nginx中。
+#ngx_modules.c文件所做的唯一的事情就是定义了ngx_modules数组，该数组指明Nginx运行期间有哪些模块会
+#参与到请求的处理中，包括HTTP请求可能会使用哪些模块处理，因此，它对数组元素的顺序非常敏感。
+#也就是说，#绝大部分模块在ngx_modules数组中的顺序其实是固定的。例如，一个请求必须先执行
+#ngx_http_gzip_filter_module模块重新修改HTTP响应中的头部后，才能使用ngx_http_header_filter模块
+#按照headers_in结构体里的成员构造出以TCP流形式发送给客户端的HTTP响应头部。
+#注意，我们在--add-module=参数里加入的第三方模块也在此步骤写入到ngx_modules.c文件中了
+. auto/modules
+
 #HQ
 echo "HQ Exit"
 exit
-. auto/modules
+
 . auto/lib/conf
 
 case ".$NGX_PREFIX" in
