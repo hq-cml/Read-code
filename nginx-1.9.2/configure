@@ -98,19 +98,25 @@ fi
 . auto/cc/conf
 
 #对非Windows操作系统定义一些必要的头文件，并检查其是否存在，以此决定configure后续步骤是否可以成功
+#具体工作就是不断编写小的.c文件，然后include头文件，看是否能够编译通过
 if [ "$NGX_PLATFORM" != win32 ]; then
     . auto/headers
 fi
 
-#HQ
-exit
-
+#对于当前操作系统，定义一些特定的操作系统相关的方法并检查当前环境是否支持。
+#例如，对于Linux，这里会：
+# check epoll、EPOLLRDHUP、O_PATH、sendfile、sendfile64等等特性。
+#使用sched_setaffinity设置进程优先级，使用Linux特有的sendfile系统调用来加速向网络中发送文件块
 . auto/os/conf
+
 
 if [ "$NGX_PLATFORM" != win32 ]; then
     . auto/unix
 fi
 
+#HQ
+echo "HQ Exit"
+exit
 . auto/threads
 . auto/modules
 . auto/lib/conf

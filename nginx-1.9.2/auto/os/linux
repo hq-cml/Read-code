@@ -2,7 +2,7 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
-
+#该文件主要是检查linux特性功能系统是否支持
 have=NGX_LINUX . auto/have_headers
 
 CORE_INCS="$UNIX_INCS"
@@ -25,6 +25,7 @@ version=$((`uname -r \
 
 version=${version:-0}
 
+echo "#-HQ-# Debug os/linux kernel version is ...... $version"
 
 # posix_fadvise64() had been implemented in 2.5.60
 

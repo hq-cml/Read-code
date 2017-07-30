@@ -32,9 +32,9 @@ fi
 #echo "--HQ Debug auto/feature ngx_feature_test is ...... $ngx_feature_test"
 
 #生成objs/autotest.c文件
+#/bin/sh -c $NGX_AUTOTEST，代码return 0，外层会认为是成功；返回非0，外层会认为是失败
 cat << END > $NGX_AUTOTEST.c
 
-#/bin/sh -c $NGX_AUTOTEST，代码return 0，外层会认为是成功；返回非0，外层会认为是失败
 #include <sys/types.h>
 $NGX_INCLUDE_UNISTD_H
 $ngx_feature_incs

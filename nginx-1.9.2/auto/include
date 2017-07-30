@@ -26,9 +26,10 @@ int main() {
 
 END
 
-
+#编译命令
 ngx_test="$CC -o $NGX_AUTOTEST $NGX_AUTOTEST.c"
 
+#执行编译
 eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&1"
 
 if [ -x $NGX_AUTOTEST ]; then
@@ -37,12 +38,14 @@ if [ -x $NGX_AUTOTEST ]; then
 
     echo " found"
 
+    #字符转换，小写=>大写
     ngx_name=`echo $ngx_include \
               | tr abcdefghijklmnopqrstuvwxyz/. ABCDEFGHIJKLMNOPQRSTUVWXYZ__`
 
 
     have=NGX_HAVE_$ngx_name . auto/have_headers
-
+    
+    #定义变量
     eval "NGX_INCLUDE_$ngx_name='#include <$ngx_include>'"
 
     #STUB
