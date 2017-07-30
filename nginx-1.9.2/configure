@@ -150,15 +150,12 @@ case ".$NGX_PREFIX" in
 esac
 echo "## -HQ- ##  Debug os/linux kernel version is ...... $version"
 
-#确定nginx配置文件路径，写入objs/ngx_auto_config.h宏定义
+#确定nginx配置文件路径前缀，写入objs/ngx_auto_config.h宏定义
 if [ ".$NGX_CONF_PREFIX" != "." ]; then
     have=NGX_CONF_PREFIX value="\"$NGX_CONF_PREFIX/\"" . auto/define
 fi
 
-#HQ
-echo "HQ Exit"
-exit
-
+#处理Nginx安装后，二进制文件、pid、lock等其他文件的路径，将这些内容作为宏定义写入objs/ngx_auto_config.h
 have=NGX_SBIN_PATH value="\"$NGX_SBIN_PATH\"" . auto/define
 have=NGX_CONF_PATH value="\"$NGX_CONF_PATH\"" . auto/define
 have=NGX_PID_PATH value="\"$NGX_PID_PATH\"" . auto/define
@@ -177,8 +174,14 @@ have=NGX_HTTP_UWSGI_TEMP_PATH value="\"$NGX_HTTP_UWSGI_TEMP_PATH\""
 have=NGX_HTTP_SCGI_TEMP_PATH value="\"$NGX_HTTP_SCGI_TEMP_PATH\""
 . auto/define
 
+#创建编译时使用的objs/Makefile文件
 . auto/make
+
 . auto/lib/make
+
+#HQ
+echo "HQ Exit"
+exit
 . auto/install
 
 # STUB

@@ -5,6 +5,7 @@
 
 echo "creating $NGX_MAKEFILE"
 
+#先创建一堆objs/子目录
 mkdir -p $NGX_OBJS/src/core $NGX_OBJS/src/event $NGX_OBJS/src/event/modules \
          $NGX_OBJS/src/os/unix $NGX_OBJS/src/os/win32 \
          $NGX_OBJS/src/http $NGX_OBJS/src/http/modules \
@@ -17,7 +18,7 @@ mkdir -p $NGX_OBJS/src/core $NGX_OBJS/src/event $NGX_OBJS/src/event/modules \
 ngx_objs_dir=$NGX_OBJS$ngx_regex_dirsep
 ngx_use_pch=`echo $NGX_USE_PCH | sed -e "s/\//$ngx_regex_dirsep/g"`
 
-
+#Makefile的一些常用变量
 cat << END                                                     > $NGX_MAKEFILE
 
 CC =	$CC
@@ -36,6 +37,7 @@ fi
 
 # ALL_INCS, required by the addons and by OpenWatcom C precompiled headers
 
+#Makefile的-I选项内容
 ngx_incs=`echo $CORE_INCS $NGX_OBJS $HTTP_INCS $MAIL_INCS $STREAM_INCS\
     | sed -e "s/  *\([^ ][^ ]*\)/$ngx_regex_cont$ngx_include_opt\1/g" \
           -e "s/\//$ngx_regex_dirsep/g"`
@@ -46,9 +48,11 @@ ALL_INCS = $ngx_include_opt$ngx_incs
 
 END
 
+#区分大类：core，http，mail，stream，addon分别计算依赖文件和头文件
 
 ngx_all_srcs="$CORE_SRCS"
 
+#echo "## -HQ- ##  Debug auto/make ngx_all_srcs is ...... $ngx_all_srcs"
 
 # the core dependencies and include paths
 
@@ -64,11 +68,10 @@ cat << END                                                    >> $NGX_MAKEFILE
 
 CORE_DEPS = $ngx_deps
 
-
 CORE_INCS = $ngx_include_opt$ngx_incs
 
 END
-
+echo "## -HQ- ##  Debug auto/make CORE_INCS is ...... $CORE_INCS"
 
 # the http dependencies and include paths
 
@@ -161,7 +164,7 @@ END
 
 fi
 
-
+#生成主的依赖分析内容
 # nginx
 
 ngx_all_srcs=`echo $ngx_all_srcs | sed -e "s/\//$ngx_regex_dirsep/g"`
@@ -183,8 +186,11 @@ ngx_all_objs=`echo $ngx_all_srcs \
           -e "s#\([^ ]*\.\)cc#$NGX_OBJS\/\1$ngx_objext#g" \
           -e "s#\([^ ]*\.\)c#$NGX_OBJS\/\1$ngx_objext#g" \
           -e "s#\([^ ]*\.\)S#$NGX_OBJS\/\1$ngx_objext#g"`
+          
+echo "## -HQ- ##  Debug auto/make ngx_all_objs is ...... $ngx_all_objs"
 
 ngx_modules_c=`echo $NGX_MODULES_C | sed -e "s/\//$ngx_regex_dirsep/g"`
+echo "## -HQ- ##  Debug auto/make ngx_modules_c is ...... $ngx_modules_c"
 
 ngx_modules_obj=`echo $ngx_modules_c | sed -e "s/\(.*\.\)c/\1$ngx_objext/"`
 
@@ -212,7 +218,8 @@ fi
 ngx_link=${CORE_LINK:+`echo $CORE_LINK \
     | sed -e "s/\//$ngx_regex_dirsep/g" -e "s/^/$ngx_long_regex_cont/"`}
 
-
+#将主依赖分析内容写入Makefile
+#{ngx_dirsep}是目录分隔符
 cat << END                                                    >> $NGX_MAKEFILE
 
 $NGX_OBJS${ngx_dirsep}nginx${ngx_binext}:	$ngx_deps$ngx_spacer
@@ -220,8 +227,9 @@ $NGX_OBJS${ngx_dirsep}nginx${ngx_binext}:	$ngx_deps$ngx_spacer
 	$ngx_rcc
 ${ngx_long_end}
 END
+echo "## -HQ- ##  Debug auto/make ngx_long_end is ...... $ngx_long_end"
 
-
+#生成ngx_modules.c的依赖分析内容
 # ngx_modules.c
 
 if test -n "$NGX_PCH"; then
@@ -236,8 +244,9 @@ $ngx_modules_obj:	\$(CORE_DEPS)$ngx_cont$ngx_modules_c
 	$ngx_cc$ngx_tab$ngx_objout$ngx_modules_obj$ngx_tab$ngx_modules_c$NGX_AUX
 
 END
+exit
 
-
+#生成core的依赖分析内容
 # the core sources
 
 for ngx_src in $CORE_SRCS
@@ -258,7 +267,7 @@ END
 
 done
 
-
+#生成http的依赖分析内容
 # the http sources
 
 if [ $HTTP = YES ]; then
@@ -302,7 +311,7 @@ END
 
 fi
 
-
+#生成mail的依赖分析内容
 # the mail sources
 
 if [ $MAIL = YES ]; then
@@ -332,7 +341,7 @@ END
 
 fi
 
-
+#生成stream的依赖分析内容
 # the stream sources
 
 if [ $STREAM = YES ]; then
@@ -362,7 +371,7 @@ END
 
 fi
 
-
+#生成misc的依赖分析内容
 # the misc sources
 
 if test -n "$NGX_MISC_SRCS"; then
@@ -388,7 +397,7 @@ END
 
 fi
 
-
+#生成addon的依赖分析内容
 # the addons sources
 
 if test -n "$NGX_ADDON_SRCS"; then
