@@ -128,10 +128,8 @@ fi
 #注意，我们在--add-module=参数里加入的第三方模块也在此步骤写入到ngx_modules.c文件中了
 . auto/modules
 
-#HQ
-echo "HQ Exit"
-exit
-
+#conf脚本用来检查Nginx在链接期间需要链接的第三方静态库、动态库或者目标文件是否存在
+#比如：PCRE，md5，sha1，zlib等等，采用的方式仍然是尝试编译小文件的方式
 . auto/lib/conf
 
 case ".$NGX_PREFIX" in
@@ -152,6 +150,10 @@ esac
 if [ ".$NGX_CONF_PREFIX" != "." ]; then
     have=NGX_CONF_PREFIX value="\"$NGX_CONF_PREFIX/\"" . auto/define
 fi
+
+#HQ
+echo "HQ Exit"
+exit
 
 have=NGX_SBIN_PATH value="\"$NGX_SBIN_PATH\"" . auto/define
 have=NGX_CONF_PATH value="\"$NGX_CONF_PATH\"" . auto/define
