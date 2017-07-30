@@ -3,6 +3,24 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
+##############################################################################################
+#
+#一些说明：
+#1. auto/have
+#   这种写法在configure中经常出现，期含义是先定义have变量为某个字符串，然后调用auto/have脚本
+#   have脚本的行为是将have表示的字符串以宏定义形式写入ngx_auto_config.h文件
+#
+#2. 简单的main函数
+#   confugure在检查某个特性是否存在的时候，会生成一个c文件，有一个main函数并include待检测头文件,
+#   如果能够顺利编译则说明系统支持该特性，编译结果写入objs/autoconf.err
+#
+#3. auto/feature
+#   该文件类似于一个封装的函数，主要是检查ngx_feature的功能系统是否支持，ngx_feature是动态指定的
+#   检查的方法就是利用上面2提到的简单编译.c文件的方式
+#
+##############################################################################################
+
+
 #设置Locale，软件在运行时的语言环境
 LC_ALL=C
 export LC_ALL
@@ -37,8 +55,6 @@ echo > $NGX_AUTOCONF_ERR
 echo "#define NGX_CONFIGURE \"$NGX_CONFIGURE\"" > $NGX_AUTO_CONFIG_H
 
 #判断DEBUG标志，如果有，那么在objs/ngx_auto_config.h文件中写入DEBUG宏
-#这种写法在下面经常出现，期含义是先定义have变量为NGX_DEBUG，然后调用auto/have
-#have脚本的行为是将NGX_DEBUG以宏定义形式写入ngx_auto_config.h文件
 #最终ngx_auto_config.h文件会有有一段如下内容：
 #ifndef NGX_DEBUG
 #define NGX_DEBUG  1
@@ -72,12 +88,22 @@ else
 fi
 
 #检查并设置编译器，如GCC是否安装、GCC版本是否支持后续编译nginx
+#cc/conf这里其实大致干了几件事情：
+#1. 检查编译器类型，通常是gcc
+#2. 检查gcc是否可以用，利用gcc编译一个最贱的.c文件，如果顺利编译就表示可用
+#3. 确定gcc的编译选项CFLAGS
+#4. check是否支持原子操作
+#5. check是否支持C99 variadic macros
+#6. check是否支持gcc variadic macros
 . auto/cc/conf
 
+#对非Windows操作系统定义一些必要的头文件，并检查其是否存在，以此决定configure后续步骤是否可以成功
 if [ "$NGX_PLATFORM" != win32 ]; then
     . auto/headers
 fi
 
+#HQ
+exit
 
 . auto/os/conf
 
