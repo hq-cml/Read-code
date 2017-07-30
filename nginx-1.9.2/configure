@@ -115,10 +115,13 @@ if [ "$NGX_PLATFORM" != win32 ]; then
     . auto/unix
 fi
 
+#nginx线程池配置，编译选项是--with-threads
+#http://www.infoq.com/cn/articles/thread-pools-boost-performance-9x/
+. auto/threads
+
 #HQ
 echo "HQ Exit"
 exit
-. auto/threads
 . auto/modules
 . auto/lib/conf
 

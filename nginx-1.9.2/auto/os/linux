@@ -25,7 +25,7 @@ version=$((`uname -r \
 
 version=${version:-0}
 
-echo "#-HQ-# Debug os/linux kernel version is ...... $version"
+echo "## -HQ- ##  Debug os/linux kernel version is ...... $version"
 
 # posix_fadvise64() had been implemented in 2.5.60
 
