@@ -109,7 +109,8 @@ fi
 #使用sched_setaffinity设置进程优先级，使用Linux特有的sendfile系统调用来加速向网络中发送文件块
 . auto/os/conf
 
-
+#定义类UNIX 操作系统中通用的头文件和系统调用等，并检查当前环境是否支持
+#比如：group，poll，kqueue。。。。。
 if [ "$NGX_PLATFORM" != win32 ]; then
     . auto/unix
 fi

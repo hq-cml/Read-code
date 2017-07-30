@@ -2,6 +2,8 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
+#检查一系列unix的系统调用
+echo "## -HQ- ## Debug auto/unix begin to check unix"
 
 NGX_USER=${NGX_USER:-nobody}
 
