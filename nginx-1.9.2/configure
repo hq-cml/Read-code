@@ -132,8 +132,10 @@ fi
 #比如：PCRE，md5，sha1，zlib等等，采用的方式仍然是尝试编译小文件的方式
 . auto/lib/conf
 
+#确定nginx安装路径，写入objs/ngx_auto_config.h宏定义
 case ".$NGX_PREFIX" in
     .)
+        #如果NGX_PREFIX为空，则就是-后面的值
         NGX_PREFIX=${NGX_PREFIX:-/usr/local/nginx}
         have=NGX_PREFIX value="\"$NGX_PREFIX/\"" . auto/define
     ;;
@@ -146,7 +148,9 @@ case ".$NGX_PREFIX" in
         have=NGX_PREFIX value="\"$NGX_PREFIX/\"" . auto/define
     ;;
 esac
+echo "## -HQ- ##  Debug os/linux kernel version is ...... $version"
 
+#确定nginx配置文件路径，写入objs/ngx_auto_config.h宏定义
 if [ ".$NGX_CONF_PREFIX" != "." ]; then
     have=NGX_CONF_PREFIX value="\"$NGX_CONF_PREFIX/\"" . auto/define
 fi
